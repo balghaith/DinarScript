@@ -1,0 +1,91 @@
+DinarScript {
+  Program     = Statement+
+
+  Statement   = VarDecl
+              | FunDecl
+              | WhileStmt
+              | break
+              | ReturnStmt
+              | Assignment
+              | Exp
+
+  VarDecl     = (let | final) id ":" Type "=" Exp
+  FunDecl     = fun id Params ReturnType? ":" Block end
+  Params      = "(" ListOf<Param, ","> ")"
+  Param       = id ":" Type
+  ReturnType  = "->" Type
+
+  WhileStmt   = while Exp ":" Block end
+  Assignment  = id "=" Exp
+  ReturnStmt  = ret Exp
+
+  Block       = Statement*
+
+  Type        = IntType | BoolType | StringType | DecType | KDType | VoidType
+  IntType     = "Int" ~alnum
+  BoolType    = "Bool" ~alnum
+  StringType  = "String" ~alnum
+  DecType     = "Dec" ~alnum
+  KDType      = "KD" ~alnum
+  VoidType    = "Void" ~alnum
+
+  Exp         = Exp1
+
+  Exp1        = Exp2 ("or" Exp2)+
+              | Exp2
+
+  Exp2        = Exp3 ("and" Exp3)+
+              | Exp3
+
+  Exp3        = Exp4 (("==" | "!=") Exp4)+
+              | Exp4
+
+  Exp4        = Exp5 (("<=" | "<" | ">=" | ">") Exp5)+
+              | Exp5
+
+  Exp5        = Exp5 (("+" | "-") Exp6)
+              | Exp6
+
+  Exp6        = Exp6 (("*" | "/") Exp7)
+              | Exp7
+
+  Exp7        = ("-" | "not") Exp7
+              | Exp8
+
+  Exp8        = Exp8 "(" ListOf<Exp, ","> ")"
+              | Primary
+
+  Primary     = true
+              | false
+              | number
+              | string
+              | id
+              | "(" Exp ")"
+
+  number      = digit+ ("." digit+)?
+  string      = "\"" (~"\"" any)* "\""
+
+  let         = "let" ~alnum
+  final       = "final" ~alnum
+  fun         = "fun" ~alnum
+  end         = "end" ~alnum
+  while       = "while" ~alnum
+  break       = "break" ~alnum
+  ret         = "return" ~alnum
+
+  kd          = "kd" ~alnum
+  fils        = "fils" ~alnum
+  show        = "show" ~alnum
+
+  true        = "true" ~alnum
+  false       = "false" ~alnum
+
+  keyword     = let | final | fun | end | while | break | ret
+              | kd | fils | show
+              | true | false
+              | IntType | BoolType | StringType | DecType | KDType | VoidType
+
+  id          = ~keyword letter (alnum | "_")*
+
+  space      += "//" (~"\n" any)*
+}
