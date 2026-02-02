@@ -1,23 +1,48 @@
 DinarScript {
+
   Program     = Statement+
 
-  Statement   = VarDecl
+  Statement   = SimpleStmt
               | FunDecl
               | WhileStmt
-              | break
-              | ReturnStmt
-              | Assignment
-              | Exp
+              | IfStmt
+              | MatchStmt
+              | RecordDecl
 
-  VarDecl     = (let | final) id ":" Type "=" Exp
-  FunDecl     = fun id Params ReturnType? ":" Block end
+  SimpleStmt  = (VarDecl | Assignment | ReturnStmt | BreakStmt | ShowStmt | Exp) ";"
+
+  VarDecl     = (let | final) id TypeAnn? "=" Exp
+  TypeAnn     = ":" Type
+
+  FunDecl     = fun id Params ReturnType? ":" Block endkw
   Params      = "(" ListOf<Param, ","> ")"
   Param       = id ":" Type
   ReturnType  = "->" Type
 
-  WhileStmt   = while Exp ":" Block end
+  WhileStmt   = while Exp ":" Block endkw
+  IfStmt      = if Exp ":" Block ElsePart? endkw
+  ElsePart    = else ":" Block
+
+  MatchStmt   = match Exp ":" Case+ endkw
+  Case        = case Pattern ":" Block
+
+  Pattern     = "_"
+              | true
+              | false
+              | MoneyLit
+              | MoneyCtor
+              | number
+              | string
+              | id
+
+  RecordDecl  = record id "{" FieldDecl* "}"
+  FieldDecl   = Access id ":" Type ";"
+  Access      = public | private
+
   Assignment  = id "=" Exp
-  ReturnStmt  = ret Exp
+  ReturnStmt  = ret Exp?
+  BreakStmt   = break
+  ShowStmt    = show "(" Exp ")"
 
   Block       = Statement*
 
@@ -29,38 +54,62 @@ DinarScript {
   KDType      = "KD" ~alnum
   VoidType    = "Void" ~alnum
 
-  Exp         = Exp1
+  Exp         = ExpOr
 
-  Exp1        = Exp2 ("or" Exp2)+
-              | Exp2
+  ExpOr       = ExpAnd OrTail*
+  OrTail      = "or" ExpAnd
 
-  Exp2        = Exp3 ("and" Exp3)+
-              | Exp3
+  ExpAnd      = ExpEq AndTail*
+  AndTail     = "and" ExpEq
 
-  Exp3        = Exp4 (("==" | "!=") Exp4)+
-              | Exp4
+  ExpEq       = ExpRel EqTail*
+  EqTail      = ("==" | "!=") ExpRel
 
-  Exp4        = Exp5 (("<=" | "<" | ">=" | ">") Exp5)+
-              | Exp5
+  ExpRel      = ExpAdd RelTail*
+  RelTail     = ("<=" | "<" | ">=" | ">") ExpAdd
 
-  Exp5        = Exp5 (("+" | "-") Exp6)
-              | Exp6
+  ExpAdd      = ExpMul AddTail*
+  AddTail     = ("+" | "-") ExpMul
 
-  Exp6        = Exp6 (("*" | "/") Exp7)
-              | Exp7
+  ExpMul      = ExpUnary MulTail*
+  MulTail     = ("*" | "/") ExpUnary
 
-  Exp7        = ("-" | "not") Exp7
-              | Exp8
+  ExpUnary    = UnaryOp* ExpPostfix
+  UnaryOp     = "-" | "not"
 
-  Exp8        = Exp8 "(" ListOf<Exp, ","> ")"
-              | Primary
+  ExpPostfix  = Primary Postfix*
+  Postfix     = Call | Field
+  Call        = "(" ListOf<Exp, ","> ")"
+  Field       = "." id
 
-  Primary     = true
+  Primary     = ParenExp
+              | true
               | false
+              | MoneyLit
+              | MoneyCtor
               | number
               | string
               | id
-              | "(" Exp ")"
+
+  ParenExp    = "(" Exp ")"
+
+  MoneyCtor   = KDCall | FilsCall
+  KDCall      = kd "(" number ")"
+  FilsCall    = fils "(" digit+ ")"
+
+  MoneyLit     = BuiltInDenom | KDWhole | FilsWhole | KDMixed
+  BuiltInDenom = QuarterKD | HalfKD | OneKD | FiveKD | TenKD | TwentyKD
+
+  QuarterKD   = "1/4kd" ~alnum
+  HalfKD      = "1/2kd" ~alnum
+  OneKD       = "1kd" ~alnum
+  FiveKD      = "5kd" ~alnum
+  TenKD       = "10kd" ~alnum
+  TwentyKD    = "20kd" ~alnum
+
+  KDWhole     = digit+ kd
+  FilsWhole   = digit+ fils
+  KDMixed     = digit+ kd digit+ fils
 
   number      = digit+ ("." digit+)?
   string      = "\"" (~"\"" any)* "\""
@@ -68,24 +117,38 @@ DinarScript {
   let         = "let" ~alnum
   final       = "final" ~alnum
   fun         = "fun" ~alnum
-  end         = "end" ~alnum
+  endkw       = "end" ~alnum
   while       = "while" ~alnum
+  if          = "if" ~alnum
+  else        = "else" ~alnum
+  match       = "match" ~alnum
+  case        = "case" ~alnum
+  record      = "record" ~alnum
+  public      = "public" ~alnum
+  private     = "private" ~alnum
   break       = "break" ~alnum
   ret         = "return" ~alnum
+  show        = "show" ~alnum
 
   kd          = "kd" ~alnum
   fils        = "fils" ~alnum
-  show        = "show" ~alnum
 
   true        = "true" ~alnum
   false       = "false" ~alnum
 
-  keyword     = let | final | fun | end | while | break | ret
-              | kd | fils | show
+  reserved    = let | final | fun | endkw | while | if | else | match | case
+              | record | public | private | break | ret | show
+              | kd | fils
               | true | false
-              | IntType | BoolType | StringType | DecType | KDType | VoidType
+              | ("Int" ~alnum)
+              | ("Bool" ~alnum)
+              | ("String" ~alnum)
+              | ("Dec" ~alnum)
+              | ("KD" ~alnum)
+              | ("Void" ~alnum)
 
-  id          = ~keyword letter (alnum | "_")*
+  id          = ~reserved letter (alnum | "_")*
 
-  space      += "//" (~"\n" any)*
+  comment     = "//" (~"\n" any)*
+  space      += comment
 }
