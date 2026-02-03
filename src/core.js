@@ -93,4 +93,3 @@ export function program(statements) {
   String.prototype.type = stringType
   Number.prototype.type = decType
   Boolean.prototype.type = boolType
-  
