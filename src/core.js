@@ -6,8 +6,8 @@ export function program(statements) {
     return { kind: "VariableDeclaration", variable, initializer }
   }
   
-  export function variable(name, isFinal, type) {
-    return { kind: "Variable", name, isFinal, type }
+  export function variable(name, mutable, type) {
+    return { kind: "Variable", name, mutable, type }
   }
   
   export const boolType = "Bool"
@@ -47,6 +47,8 @@ export function program(statements) {
   export function returnStatement(expression) {
     return { kind: "ReturnStatement", expression }
   }
+  
+  export const shortReturnStatement = { kind: "ShortReturnStatement" }
   
   export function whileStatement(test, body) {
     return { kind: "WhileStatement", test, body }
@@ -93,3 +95,4 @@ export function program(statements) {
   String.prototype.type = stringType
   Number.prototype.type = decType
   Boolean.prototype.type = boolType
+  
