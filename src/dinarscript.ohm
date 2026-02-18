@@ -97,7 +97,7 @@ DinarScript {
   KDCall      = kd "(" number ")"
   FilsCall    = fils "(" digit+ ")"
 
-  MoneyLit     = BuiltInDenom | KDWhole | FilsWhole | KDMixed
+  MoneyLit     = BuiltInDenom | KDMixed | KDWhole | FilsWhole
   BuiltInDenom = QuarterKD | HalfKD | OneKD | FiveKD | TenKD | TwentyKD
 
   QuarterKD   = "1/4kd" ~alnum
@@ -107,9 +107,12 @@ DinarScript {
   TenKD       = "10kd" ~alnum
   TwentyKD    = "20kd" ~alnum
 
-  KDWhole     = digit+ kd
-  FilsWhole   = digit+ fils
-  KDMixed     = digit+ kd digit+ fils
+  KDWhole     = digit+ kdSuffix
+  FilsWhole   = digit+ filsSuffix
+  KDMixed     = digit+ kdSuffix digit+ filsSuffix
+
+  kdSuffix    = "kd"
+  filsSuffix  = "fils"
 
   number      = digit+ ("." digit+)?
   string      = "\"" (~"\"" any)* "\""

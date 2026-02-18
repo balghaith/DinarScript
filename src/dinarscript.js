@@ -1,16 +1,20 @@
-const fs = require("fs");
-const ohm = require("ohm-js");
+import { match } from "./parser.js"
+import analyze from "./analyzer.js"
 
-const grammar = ohm.grammar(fs.readFileSync("src/dinarscript.ohm", "utf8"));
-
-function match(source) {
-  return grammar.match(source);
+export function optimize(ast) {
+  return ast
 }
 
-function parse(source) {
-  const m = grammar.match(source);
-  if (m.failed()) throw new Error(m.message);
-  return m;
+export function generate(ast) {
+  return ast
 }
 
-module.exports = { default: parse, match };
+export function compile(source) {
+  const m = match(source)
+  const ast = analyze(m)
+  const optimized = optimize(ast)
+  return generate(optimized)
+}
+
+export { match, analyze }
+export default compile

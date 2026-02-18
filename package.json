@@ -8,7 +8,7 @@
       "dinarscript": "./bin/dinarscript"
     },
     "scripts": {
-      "test": "c8 --100 jest",
+      "test": "NODE_OPTIONS=--experimental-vm-modules c8 --100 jest",
       "format": "prettier -w ."
     },
     "repository": {
@@ -29,5 +29,5 @@
       "c8": "^10.0.0",
       "prettier": "^3.0.0"
     }
-  }
+  }  
   
