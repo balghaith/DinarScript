@@ -28,8 +28,8 @@ function isType(x) {
   if (x === core.decType) return true
   if (x === core.kdType) return true
   if (x === core.voidType) return true
-  if (x.kind === "RecordType") return true
-  if (x.kind === "FunctionType") return true
+  if (x?.kind === "RecordType") return true
+  if (x?.kind === "FunctionType") return true
   return false
 }
 
@@ -91,10 +91,6 @@ export default function analyze(match) {
 
   function mustHaveDecType(e, at) {
     must(e.type === core.decType, "Expected a number", at)
-  }
-
-  function mustHaveDecOrStringType(e, at) {
-    must(e.type === core.decType || e.type === core.stringType, "Expected a number or string", at)
   }
 
   function mustHaveKdorDecOrStringType(e, at) {
@@ -236,7 +232,9 @@ export default function analyze(match) {
     return { kind: "FunctionCall", callee, args, type: returnType }
   }
 
-  const builder = match.matcher.grammar.createSemantics().addOperation("rep", {
+  const semantics = match.matcher.grammar.createSemantics()
+
+  semantics.addOperation("rep", {
     Program(statements) {
       return core.program(statements.children.map(s => s.rep()))
     },
@@ -271,17 +269,24 @@ export default function analyze(match) {
     FunDecl(_fun, id, params, returnTypeOpt, _colon, block, _end) {
       const name = id.sourceString
       mustNotAlreadyBeDeclared(name, { at: id })
+
+      const savedContext = context
+      context = context.newChildContext({ inLoop: false, function: null })
       const ps = params.rep()
+      context = savedContext
+
       const returnType = returnTypeOpt.children.length ? returnTypeOpt.child(0).rep() : core.voidType
       const type = core.functionType(ps.map(p => p.type), returnType)
       const f = core.fun(name, ps, null, type)
       context.add(name, f)
+
       context = context.newChildContext({ inLoop: false, function: f })
       for (const p of ps) {
-        mustNotAlreadyBeDeclared(p.name ?? p.id ?? p.sourceString ?? "", { at: id })
+        context.add(p.name, p)
       }
       f.body = block.rep()
       context = context.parent
+
       return core.functionDeclaration(f)
     },
 
@@ -290,11 +295,46 @@ export default function analyze(match) {
     },
 
     Param(id, _colon, type) {
-      const p = core.param ? core.param(id.sourceString, type.rep()) : core.variable(id.sourceString, false, type.rep())
-      const name = p.name ?? id.sourceString
+      const name = id.sourceString
       mustNotAlreadyBeDeclared(name, { at: id })
+      const t = type.rep()
+      mustBeAType(t, { at: type })
+      const p = core.param ? core.param(name, t) : core.variable(name, false, t)
       context.add(name, p)
       return p
+    },
+
+    MatchStmt(_match, exp, _colon, cases, _end) {
+      const e = exp.rep()
+      const cs = cases.children.map(c => c.rep()(e))
+      return { kind: "MatchStatement", exp: e, cases: cs }
+    },
+
+    Case(_case, pattern, _colon, block) {
+      return subjectExp => {
+        const text = pattern.sourceString.trim()
+        context = context.newChildContext()
+
+        let p
+        if (text === "_") {
+          p = { kind: "WildcardPattern" }
+        } else if (/^[A-Za-z_]\w*$/.test(text)) {
+          const v = core.variable(text, false, subjectExp.type)
+          context.add(text, v)
+          p = { kind: "BindingPattern", name: text, entity: v }
+        } else {
+          p = pattern.rep()
+          mustBothHaveTheSameType(subjectExp, p, { at: pattern })
+        }
+
+        const b = block.rep()
+        context = context.parent
+        return { kind: "Case", pattern: p, block: b }
+      }
+    },
+
+    Pattern(p) {
+      return p.rep()
     },
 
     ReturnType(_arrow, type) {
@@ -327,31 +367,6 @@ export default function analyze(match) {
 
     ElsePart(_else, _colon, block) {
       return block.rep()
-    },
-
-    MatchStmt(_match, exp, _colon, cases, _end) {
-      const e = exp.rep()
-      const cs = cases.children.map(c => c.rep(e))
-      return { kind: "MatchStatement", exp: e, cases: cs }
-    },
-
-    Case(_case, pattern, _colon, block) {
-      return subjectExp => {
-        const p = pattern.rep(subjectExp)
-        context = context.newChildContext()
-        if (p?.kind === "BindingPattern") {
-          const v = core.variable(p.name, false, subjectExp.type)
-          context.add(p.name, v)
-          p.entity = v
-        }
-        const b = block.rep()
-        context = context.parent
-        return { kind: "Case", pattern: p, block: b }
-      }
-    },
-
-    Pattern(p) {
-      return subjectExp => p.rep(subjectExp)
     },
 
     RecordDecl(_record, id, _lbrace, fields, _rbrace) {
@@ -557,7 +572,7 @@ export default function analyze(match) {
       return makeLiteral("BooleanLiteral", false, core.boolType)
     },
 
-    number(_whole, _dotFracOpt) {
+    number(_whole, _dot, _frac) {
       return makeLiteral("NumberLiteral", Number(this.sourceString), core.decType)
     },
 
@@ -606,33 +621,7 @@ export default function analyze(match) {
     KDMixed(_kDigits, _kd, _fDigits, _fils) {
       return makeLiteral("MoneyLiteral", this.sourceString, core.kdType)
     },
+  })
 
-    true(_) {
-        return makeLiteral("BooleanLiteral", true, core.boolType)
-      },
-      
-      false(_) {
-        return makeLiteral("BooleanLiteral", false, core.boolType)
-      },
-      
-      number(_whole, _dot, _frac) {
-        return makeLiteral("NumberLiteral", Number(this.sourceString), core.decType)
-      },
-      
-      string(_open, _chars, _close) {
-        const raw = this.sourceString
-        return makeLiteral("StringLiteral", raw.slice(1, -1), core.stringType)
-      },
-      
-      id(_first, _rest) {
-        const name = this.sourceString
-        const entity = context.lookup(name)
-        if (!entity) {
-          throw new Error(`Identifier ${name} not declared`)
-        }
-        return core.variable(name, false, entity.type)
-      },
-    })
-      
-    return builder(match).rep()
+  return semantics(match).rep()
 }

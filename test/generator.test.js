@@ -1,4 +1,3 @@
-import { describe, it } from "node:test"
 import assert from "node:assert/strict"
 import { match } from "../src/parser.js"
 import analyze from "../src/analyzer.js"
