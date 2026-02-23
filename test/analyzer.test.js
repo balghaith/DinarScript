@@ -44,7 +44,7 @@ const semanticErrors = [
   ["+ mismatched types", "show(1 + true);", /Operands do not have the same type/],
   ["* requires numbers", "show(true * 2);", /Expected a number/],
   ["assignment type mismatch", "let x: Dec = 1; x = true;", /Cannot assign a Bool to a Dec/],
-  ["match literal pattern wrong type", "match 1: case true: show(1); end", /Operands do not have the same type/],
+  ["match literal pattern wrong type", "match 1: case true: show(1); end", /Expected a boolean/],
   ["record fields must be distinct", "record R { public x: Dec; private x: Dec; }", /Fields must be distinct/],
 ]
 

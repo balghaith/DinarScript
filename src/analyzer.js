@@ -312,19 +312,19 @@ export default function analyze(match) {
 
     Case(_case, pattern, _colon, block) {
       return subjectExp => {
-        const text = pattern.sourceString.trim()
         context = context.newChildContext()
+        const p = pattern.rep()
 
-        let p
-        if (text === "_") {
-          p = { kind: "WildcardPattern" }
-        } else if (/^[A-Za-z_]\w*$/.test(text)) {
-          const v = core.variable(text, false, subjectExp.type)
-          context.add(text, v)
-          p = { kind: "BindingPattern", name: text, entity: v }
-        } else {
-          p = pattern.rep()
-          mustBothHaveTheSameType(subjectExp, p, { at: pattern })
+        if (p.kind === "WildcardPattern") {
+          ;
+        } else if (p.kind === "BooleanLiteral") {
+          mustHaveBooleanType(subjectExp, { at: pattern })
+        } else if (p.kind === "NumberLiteral") {
+          mustHaveDecType(subjectExp, { at: pattern })
+        } else if (p.kind === "StringLiteral") {
+          mustHaveStringType(subjectExp, { at: pattern })
+        } else if (p.kind === "KDConstructor" || p.kind === "FilsConstructor") {
+          mustHaveDecType(subjectExp, { at: pattern })
         }
 
         const b = block.rep()
@@ -333,8 +333,16 @@ export default function analyze(match) {
       }
     },
 
-    Pattern(p) {
-      return p.rep()
+    Pattern_binding(id) {
+      const name = id.sourceString
+      mustNotAlreadyBeDeclared(name, { at: id })
+      const v = core.variable(name, false, null)
+      context.add(name, v)
+      return v
+    },
+
+    Pattern_wildcard(_) {
+      return { kind: "WildcardPattern" }
     },
 
     ReturnType(_arrow, type) {

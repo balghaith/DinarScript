@@ -26,14 +26,14 @@ DinarScript {
   MatchStmt   = match Exp ":" Case+ endkw
   Case        = case Pattern ":" Block
 
-  Pattern     = "_"
+  Pattern     = "_"                --wildcard
               | true
               | false
               | MoneyLit
               | MoneyCtor
               | number
               | string
-              | id
+              | id                 --binding
 
   RecordDecl  = record id "{" FieldDecl* "}"
   FieldDecl   = Access id ":" Type ";"
