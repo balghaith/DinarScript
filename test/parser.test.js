@@ -1,3 +1,4 @@
+import { describe, test } from "node:test"
 import { match } from "../src/parser.js"
 
 const syntaxChecks = [
@@ -51,15 +52,15 @@ describe("The parser", () => {
   for (const [scenario, source] of syntaxChecks) {
     test(`matches ${scenario}`, () => {
       const m = match(source)
-      expect(m.succeeded()).toBe(true)
+      assert.ok(m.succeeded())
     })
   }
 
   for (const [scenario, source] of syntaxErrors) {
     test(`rejects ${scenario}`, () => {
       const m = match(source)
-      expect(m.succeeded()).toBe(false)
-      expect(typeof m.message).toBe("string")
+      assert.ok(!m.succeeded())
+      assert.strictEqual(typeof m.message, "string")
     })
   }
 })

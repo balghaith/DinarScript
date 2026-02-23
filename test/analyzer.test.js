@@ -1,3 +1,5 @@
+import { describe, test } from "node:test"
+import assert from "node:assert/strict"
 import { match } from "../src/parser.js"
 import analyze from "../src/analyzer.js"
 import * as core from "../src/core.js"
@@ -50,31 +52,31 @@ describe("The analyzer", () => {
   for (const [scenario, source] of semanticChecks) {
     test(`recognizes ${scenario}`, () => {
       const m = match(source)
-      expect(m.succeeded()).toBe(true)
-      expect(analyze(m)).toBeTruthy()
+      assert.ok(m.succeeded())
+      assert.ok(analyze(m))
     })
   }
 
   for (const [scenario, source, errorPattern] of semanticErrors) {
     test(`throws on ${scenario}`, () => {
       const m = match(source)
-      expect(m.succeeded()).toBe(true)
-      expect(() => analyze(m)).toThrow(errorPattern)
+      assert.ok(m.succeeded())
+      assert.throws(() => analyze(m), errorPattern)
     })
   }
 
   test("produces the expected representation for a trivial program", () => {
     const rep = analyze(match("let x = 1 + 2;"))
-    expect(rep.kind).toBe("Program")
-    expect(rep.statements).toHaveLength(1)
-    expect(rep.statements[0].kind).toBe("VariableDeclaration")
+    assert.strictEqual(rep.kind, "Program")
+    assert.strictEqual(rep.statements.length, 1)
+    assert.strictEqual(rep.statements[0].kind, "VariableDeclaration")
   })
 
   test("representation includes typed binary node", () => {
     const rep = analyze(match("let x = 1 + 2;"))
     const decl = rep.statements[0]
-    expect(decl.initializer.kind).toBe("BinaryExpression")
-    expect(decl.initializer.op).toBe("+")
-    expect(decl.initializer.type).toBe(core.decType)
+    assert.strictEqual(decl.initializer.kind, "BinaryExpression")
+    assert.strictEqual(decl.initializer.op, "+")
+    assert.strictEqual(decl.initializer.type, core.decType)
   })
 })

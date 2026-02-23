@@ -1,3 +1,4 @@
+import { describe, it } from "node:test"
 import assert from "node:assert/strict"
 import compile from "../src/compiler.js"
 
@@ -103,4 +104,3 @@ describe("The compiler", () => {
     assert.equal(compiled.kind, "Program")
   })
 })
-  
