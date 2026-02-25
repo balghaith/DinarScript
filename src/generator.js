@@ -50,6 +50,10 @@ export default function generate(program) {
       return targetName(v)
     },
 
+    Param(p) {
+      return targetName(p)
+    },
+
     Identifier(e) {
       return targetName(e.ref ?? { name: e.name })
     },
@@ -79,6 +83,10 @@ export default function generate(program) {
       emit(`function ${targetName(f)}(${f.params.map(targetName).join(", ")}) {`)
       f.body.forEach(gen)
       emit("}")
+    },
+
+    Function(f) {
+      return targetName(f)
     },
 
     IfStatement(s) {
@@ -118,7 +126,7 @@ export default function generate(program) {
       return targetName(f)
     },
 
-    ConstructorCall(c) {
+    RecordConstructor(c) {
       return `new ${targetName(c.callee)}(${c.args.map(gen).join(", ")})`
     },
 

@@ -1,0 +1,6 @@
+fun add(x: Dec, y: Dec) -> Dec:
+  return x + y;
+end
+
+let z = add(2, 3);
+show(z);

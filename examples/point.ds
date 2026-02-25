@@ -1,0 +1,6 @@
+record Point {
+  public x: Dec;
+  public y: Dec;
+}
+let p = Point(21, 42);
+show(p.x);

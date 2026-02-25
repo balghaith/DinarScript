@@ -546,7 +546,7 @@ export default function analyze(match) {
           must(objType?.kind === "RecordType", "Expected a record", { at: p })
           mustHaveMember(objType, pf.name, { at: p })
           const f = objType.fields.find(x => x.name === pf.name)
-          return fieldAccess(acc, pf.name, f.type)
+          return fieldAccess(acc, pf, f.type)
         }
         return acc
       }, primary.rep())

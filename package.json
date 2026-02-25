@@ -5,27 +5,28 @@
     "type": "module",
     "main": "src/compiler.js",
     "bin": {
-      "dinarscript": "./bin/dinarscript"
+        "dinarscript": "./bin/dinarscript"
     },
     "scripts": {
-      "test": "c8 node --test test/**/*.test.js",
-      "format": "prettier -w ."
+        "test": "c8 node --test test/**/*.test.js",
+        "format": "prettier -w ."
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/balghaith/DinarScript.git"
+        "type": "git",
+        "url": "git+https://github.com/balghaith/DinarScript.git"
     },
     "author": "Bader Al Ghaith",
     "license": "MIT",
     "bugs": {
-      "url": "https://github.com/balghaith/DinarScript/issues"
+        "url": "https://github.com/balghaith/DinarScript/issues"
     },
     "homepage": "https://github.com/balghaith/DinarScript#readme",
     "dependencies": {
-      "ohm-js": "^17.0.0"
+        "graph-stringify": "^1.1.0",
+        "ohm-js": "^17.0.0"
     },
     "devDependencies": {
-      "c8": "^10.0.0",
-      "prettier": "^3.0.0"
+        "c8": "^10.0.0",
+        "prettier": "^3.0.0"
     }
-  }
+}
