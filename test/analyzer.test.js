@@ -1,12 +1,12 @@
 import { describe, test } from "node:test"
 import assert from "node:assert/strict"
 import { match } from "../src/parser.js"
-import analyze from "../src/analyzer.js"
+import analyze, {isType} from "../src/analyzer.js"
 import * as core from "../src/core.js"
 
 const semanticChecks = [
   ["variable declarations", "let x = 1; final y = false;"],
-  ["typed declarations", "let x: Dec = 1; let s: String = \"hi\";"],
+  ["typed declarations", "let x: Dec = 1.0; let s: String = \"hi\";"],
   ["assignment to let", "let x = 1; x = 2;"],
   ["show statement", "show(1);"],
   ["expression statement", "(1 + 2) * 3;"],
@@ -15,17 +15,24 @@ const semanticChecks = [
   ["while with break", "while true: break; end"],
   ["function void return", "fun v(p: Bool) -> Void: return; end"],
   ["function return value", "fun add(x: KD, y: Dec) -> Dec: return x + y; end"],
-  ["call", "fun id(x: KD) -> KD: return x; end show(id(1));"],
+  ["call", "fun id(x: KD) -> KD: return x; end show(id(5));"],
   ["kd whole literals", "show(2kd);"],
   ["record declaration", "record Person { public name: String; private age: Dec; }"],
   ["match wildcard", "match 1: case _: show(1); end"],
   ["match with binding id", "match 1: case x: show(x); end"],
+  ["match string literal", "match \"hi\": case \"hi\": show(1); end"],
   ["money literals", "let a = 1kd; let b = 250fils; let c = 1kd50fils;"],
   ["money constructors", "let a = kd(3); let b = fils(250);"],
+  ["kd constructor in match", "match kd(5): case kd(5): show(1); end"],
+  ["kd addition", "show(1kd + 2kd);"],
+  ["kd subtraction", "show(3kd - 1kd);"],
   ["unary not", "show(not false);"],
   ["equality", "show(1 == 1); show(1 != 2);"],
   ["relations", "show(1 < 2); show(2 >= 2);"],
   ["and/or", "show(true and false); show(true or false);"],
+  ["adds two strings", `show("a" + "b");`],
+  ["call", "fun add(x: KD, y: Dec) -> Dec: return x + y; end show(add(1,2));"]
+  ,
 ]
 
 const semanticErrors = [
@@ -66,6 +73,10 @@ describe("The analyzer", () => {
       assert.throws(() => analyze(m), errorPattern)
     })
   }
+
+  test("isType returns false for non-type", () => {
+    assert.ok(!isType({}))
+  })
 
   test("produces the expected representation for a trivial program", () => {
     const rep = analyze(match("let x = 1 + 2;"))

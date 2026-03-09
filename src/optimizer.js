@@ -37,7 +37,7 @@ const optimizers = {
     if (f.body) {
       f.body = f.body.flatMap(s => {
         const o = optimize(s)
-        return Array.isArray(o) ? o : [o]
+        return o; // return Array.isArray(o) ? o : [o]
       })
     }
     return f
@@ -55,7 +55,7 @@ const optimizers = {
     if (isBool(s.test) && s.test.value === false) return []
     s.body = s.body.flatMap(st => {
       const o = optimize(st)
-      return Array.isArray(o) ? o : [o]
+      return o; // return Array.isArray(o) ? o : [o]
     })
     return s
   },
@@ -64,11 +64,11 @@ const optimizers = {
     s.test = optimize(s.test)
     s.thenBlock = s.thenBlock.flatMap(st => {
       const o = optimize(st)
-      return Array.isArray(o) ? o : [o]
+      return o; // return Array.isArray(o) ? o : [o]
     })
     s.elseBlock = s.elseBlock.flatMap(st => {
       const o = optimize(st)
-      return Array.isArray(o) ? o : [o]
+      return o; // return Array.isArray(o) ? o : [o]
     })
     if (isBool(s.test)) return s.test.value ? s.thenBlock : s.elseBlock
     return s
@@ -100,7 +100,6 @@ const optimizers = {
       if (isBool(e.right) && e.right.value === true) return e.left
       if (isBool(e.left) && e.left.value === false) return e.left
       if (isBool(e.right) && e.right.value === false) return e.right
-      if (isBool(e.left) && isBool(e.right)) return bool(e.left.value && e.right.value)
       return e
     }
 
@@ -109,7 +108,6 @@ const optimizers = {
       if (isBool(e.right) && e.right.value === false) return e.left
       if (isBool(e.left) && e.left.value === true) return e.left
       if (isBool(e.right) && e.right.value === true) return e.right
-      if (isBool(e.left) && isBool(e.right)) return bool(e.left.value || e.right.value)
       return e
     }
 
@@ -151,7 +149,5 @@ const optimizers = {
       if (e.op === "/" && zero(e.left)) return num(0)
       return e
     }
-
-    return e
   },
 }

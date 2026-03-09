@@ -9,6 +9,7 @@ const str = s => ({ kind: "StringLiteral", value: s, type: core.stringType })
 
 const x = core.variable("x", true, core.decType)
 const y = core.variable("y", true, core.decType)
+const b = core.variable("b", true, core.boolType)
 
 const show = e => ({ kind: "ShowStatement", expression: e })
 const ret = e => core.returnStatement(e)
@@ -28,12 +29,17 @@ const ifs = (test, thenBlock, elseBlock) => ({
 
 const whiles = (test, body) => core.whileStatement(test, body)
 
+const bOrB = bin("or", b, b, core.boolType)
+const bAndB = bin("and", b, b, core.boolType)
+
 const tests = [
   ["folds +", bin("+", num(5), num(8), core.decType), num(13)],
   ["folds -", bin("-", num(5), num(8), core.decType), num(-3)],
   ["folds *", bin("*", num(5), num(8), core.decType), num(40)],
   ["folds /", bin("/", num(5), num(8), core.decType), num(0.625)],
-  ["folds ==", bin("==", num(5), num(8), core.boolType), bool(false)],
+  ["folds == for numbers", bin("==", num(5), num(8), core.boolType), bool(false)],
+  ["folds == for bools", bin("==", bool(true), bool(true), core.boolType), bool(true)],
+  ["folds != for bools", bin("!=", bool(true), bool(false), core.boolType), bool(true)],
   ["folds !=", bin("!=", num(5), num(8), core.boolType), bool(true)],
   ["folds <", bin("<", num(5), num(8), core.boolType), bool(true)],
   ["folds <=", bin("<=", num(5), num(8), core.boolType), bool(true)],
@@ -73,6 +79,16 @@ const tests = [
   ["optimizes inside nested program", prog([show(bin("+", num(1), num(2), core.decType)), show(bin("*", num(2), num(3), core.decType))]), prog([show(num(3)), show(num(6))])],
 
   ["passes through string ops without folding", bin("+", str("a"), str("b"), core.stringType), bin("+", str("a"), str("b"), core.stringType)],
+
+  ["true or b is true", bin("or", bool(true), b, core.boolType), bool(true)],
+  ["b or true is true", bin("or", b, bool(true), core.boolType), bool(true)],
+  ["leaves alone b or b", bOrB, bOrB],
+
+  ["false and b is false", bin("and", bool(false), b, core.boolType), bool(false)],
+  ["b and false is false", bin("and", b, bool(false), core.boolType), bool(false)],
+  ["leaves alone b or b", bAndB, bAndB],
+
+
 ]
 
 describe("The optimizer", () => {

@@ -19,10 +19,9 @@ class Context {
   }
 }
 
-function isType(x) {
+export function isType(x) {
   if (!x) return false
   if (typeof x === "string") return true
-  if (x === core.intType) return true
   if (x === core.boolType) return true
   if (x === core.stringType) return true
   if (x === core.decType) return true
@@ -43,7 +42,6 @@ function assignable(fromType, toType) {
 }
 
 function typeDescription(type) {
-  if (type === core.intType) return "Int"
   if (type === core.boolType) return "Bool"
   if (type === core.stringType) return "String"
   if (type === core.decType) return "Dec"
@@ -59,11 +57,6 @@ function typeDescription(type) {
 }
 
 export default function analyze(match) {
-  if (!match?.succeeded?.()) {
-    const message = match?.message ?? "Syntax error"
-    throw new Error(message)
-  }
-
   let context = Context.root()
 
   function must(condition, message, errorLocation) {
@@ -90,7 +83,11 @@ export default function analyze(match) {
   }
 
   function mustHaveDecType(e, at) {
-    must(e.type === core.decType, "Expected a number", at)
+    must(e.type === core.decType, `Expected a number, found ${e.type} instead`, at)
+  }
+
+  function mustHaveStringType(e, at) {
+    must(e.type === core.stringType, "Expected a string", at)
   }
 
   function mustHaveKdorDecOrStringType(e, at) {
@@ -106,8 +103,15 @@ export default function analyze(match) {
   }
 
   function mustBeAssignable(e, { toType }, at) {
+    const ok =
+      assignable(e.type, toType) ||
+      (toType === core.kdType &&
+        e.kind === "NumberLiteral" &&
+        e.type === core.decType &&
+        Number.isInteger(e.value))
+  
     const message = `Cannot assign a ${typeDescription(e.type)} to a ${typeDescription(toType)}`
-    must(assignable(e.type, toType), message, at)
+    must(ok, message, at)
   }
 
   function isMutable(e) {
@@ -178,9 +182,15 @@ export default function analyze(match) {
     }
     if (op === "+" || op === "-") {
       if (left.type === core.stringType) {
-        must(op === "+", "Expected a number", at)
+        must(op === "+", "Can only add strings, nothing else", at)
         mustBothHaveTheSameType(left, right, at)
         return core.binary(op, left, right, core.stringType)
+      }
+    if (
+      (left.type === core.kdType && right.type === core.decType) ||
+      (left.type === core.decType && right.type === core.kdType)
+    ) {
+      return core.binary(op, left, right, core.decType)
       }
       if (left.type === core.kdType) {
         must(op === "+" || op === "-", "Expected a number", at)
@@ -196,7 +206,6 @@ export default function analyze(match) {
       mustBothHaveTheSameType(left, right, at)
       return core.binary(op, left, right, core.decType)
     }
-    return core.binary(op, left, right, left.type)
   }
 
   function makeUnary(op, operand, at) {
@@ -208,7 +217,6 @@ export default function analyze(match) {
       mustHaveBooleanType(operand, at)
       return core.unary(op, operand, core.boolType)
     }
-    return core.unary(op, operand, operand.type)
   }
 
   function recordType(name, fields) {
@@ -324,7 +332,7 @@ export default function analyze(match) {
         } else if (p.kind === "StringLiteral") {
           mustHaveStringType(subjectExp, { at: pattern })
         } else if (p.kind === "KDConstructor" || p.kind === "FilsConstructor") {
-          mustHaveDecType(subjectExp, { at: pattern })
+          mustBothHaveTheSameType(subjectExp, p, { at: pattern })
         }
 
         const b = block.rep()
@@ -434,9 +442,6 @@ export default function analyze(match) {
       return t.rep()
     },
 
-    IntType(_) {
-      return core.intType
-    },
     BoolType(_) {
       return core.boolType
     },
@@ -546,9 +551,8 @@ export default function analyze(match) {
           must(objType?.kind === "RecordType", "Expected a record", { at: p })
           mustHaveMember(objType, pf.name, { at: p })
           const f = objType.fields.find(x => x.name === pf.name)
-          return fieldAccess(acc, pf, f.type)
+          return fieldAccess(acc, f, f.type)
         }
-        return acc
       }, primary.rep())
     },
 

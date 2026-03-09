@@ -46,8 +46,7 @@ DinarScript {
 
   Block       = Statement*
 
-  Type        = IntType | BoolType | StringType | DecType | KDType | VoidType
-  IntType     = "Int" ~alnum
+  Type        = BoolType | StringType | DecType | KDType | VoidType
   BoolType    = "Bool" ~alnum
   StringType  = "String" ~alnum
   DecType     = "Dec" ~alnum

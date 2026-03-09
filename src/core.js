@@ -11,7 +11,6 @@ export function program(statements) {
   }
   
   export const boolType = "Bool"
-  export const intType = "Int"
   export const stringType = "String"
   export const decType = "Dec"
   export const kdType = "KD"
@@ -63,25 +62,23 @@ export function program(statements) {
   }
   
   export function functionCall(callee, args) {
-    if (callee.intrinsic) {
-      if (callee.type.returnType === voidType) {
-        return { kind: callee.name.replace(/^\p{L}/u, c => c.toUpperCase()), args }
+     if (callee.intrinsic) {
+       if (callee.type.returnType === voidType) {
+         return { kind: callee.name.replace(/^\p{L}/u, c => c.toUpperCase()), args }
       } else if (callee.type.paramTypes.length === 1) {
-        return unary(callee.name, args[0], callee.type.returnType)
-      } else {
-        return binary(callee.name, args[0], args[1], callee.type.returnType)
-      }
-    }
-    return { kind: "FunctionCall", callee, args, type: callee.type.returnType }
-  }
+         return unary(callee.name, args[0], callee.type.returnType)
+       } else {
+         return binary(callee.name, args[0], args[1], callee.type.returnType)
+       }
+     }
+     return { kind: "FunctionCall", callee, args, type: callee.type.returnType }
+   }
   
   const anyToVoidType = functionType([anyType], voidType)
   const decToKDType = functionType([decType], kdType)
-  const intToKDType = functionType([intType], kdType)
   
   export const standardLibrary = Object.freeze({
     Bool: boolType,
-    Int: intType,
     String: stringType,
     Dec: decType,
     KD: kdType,
@@ -89,7 +86,7 @@ export function program(statements) {
     Any: anyType,
     show: intrinsicFunction("show", anyToVoidType),
     kd: intrinsicFunction("kd", decToKDType),
-    fils: intrinsicFunction("fils", intToKDType),
+    fils: intrinsicFunction("fils", decToKDType),
   })
   
   String.prototype.type = stringType
