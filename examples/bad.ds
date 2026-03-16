@@ -1,0 +1,3 @@
+record Person { public name: String; }
+let p = Person(name: "Faisal")
+let x: Dec = p;

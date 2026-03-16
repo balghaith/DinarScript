@@ -26,11 +26,14 @@ const semanticChecks = [
   ["kd constructor in match", "match kd(5): case kd(5): show(1); end"],
   ["kd addition", "show(1kd + 2kd);"],
   ["kd subtraction", "show(3kd - 1kd);"],
+  ["relational operators with kds", "show(1kd < 2kd);"],
+  ["relational operators with strings", `show("a" < "b");`],
   ["unary not", "show(not false);"],
   ["equality", "show(1 == 1); show(1 != 2);"],
   ["relations", "show(1 < 2); show(2 >= 2);"],
   ["and/or", "show(true and false); show(true or false);"],
   ["adds two strings", `show("a" + "b");`],
+  ["adds two decimals", "show(1 + 2);"],
   ["call", "fun add(x: KD, y: Dec) -> Dec: return x + y; end show(add(1,2));"],
   ["function type description", "fun f(x: KD, y: Dec) -> Dec: return x + y; end"]
   ,
@@ -57,6 +60,7 @@ const semanticErrors = [
   ["match literal pattern wrong type", "match 1: case true: show(1); end", /Expected a boolean/],
   ["record fields must be distinct", "record R { public x: Dec; private x: Dec; }", /Fields must be distinct/],
   ["function assigned to kd", "fun f(x: KD) -> KD: return x; end let y: KD = f;", /Operands|Cannot assign|Expected/],
+  ["assign a record to a dec", "record Person { public name: String; } let x: Dec = Person;", /Identifier|Cannot assign|Expected/],
 ]
 
 describe("The analyzer", () => {
@@ -78,6 +82,18 @@ describe("The analyzer", () => {
 
   test("isType returns false for non-type", () => {
     assert.ok(!isType({}))
+    assert.ok(!(isType(false)))
+  })
+
+  test("isType returns true for diffrent values", () => {
+    assert.ok(isType(core.boolType))
+    assert.ok(isType(core.kdType))
+    assert.ok(isType(core.stringType))
+    assert.ok(isType(core.decType))
+    assert.ok(isType(core.voidType))
+    assert.ok(isType("bader"))
+    assert.ok(isType({ kind: "RecordType" }))
+    assert.ok(isType({ kind: "FunctionType" }))
   })
 
   test("produces the expected representation for a trivial program", () => {
@@ -87,11 +103,23 @@ describe("The analyzer", () => {
     assert.strictEqual(rep.statements[0].kind, "VariableDeclaration")
   })
 
+  test("analyzes function with omitted return type", () => {
+    const m = match("fun f(x: KD): show(x); end")
+    assert.ok(m.succeeded())
+    assert.ok(analyze(m))
+  })
+
   test("representation includes typed binary node", () => {
     const rep = analyze(match("let x = 1 + 2;"))
     const decl = rep.statements[0]
     assert.strictEqual(decl.initializer.kind, "BinaryExpression")
     assert.strictEqual(decl.initializer.op, "+")
     assert.strictEqual(decl.initializer.type, core.decType)
+  })
+
+  test("prints void type in assignment error", () => {
+    const m = match("fun f() -> Void: return; end let x: KD = f;")
+    assert.ok(m.succeeded())
+    assert.throws(() => analyze(m))
   })
 })

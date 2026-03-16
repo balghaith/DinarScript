@@ -11,7 +11,7 @@ class Context {
     return this.locals.get(name) || this.parent?.lookup(name)
   }
   static root() {
-    const std = core.standardLibrary ? Object.entries(core.standardLibrary) : []
+    const std = Object.entries(core.standardLibrary)
     return new Context({ locals: new Map(std) })
   }
   newChildContext(props = {}) {
@@ -21,12 +21,12 @@ class Context {
 
 export function isType(x) {
   if (!x) return false
-  if (typeof x === "string") return true
   if (x === core.boolType) return true
   if (x === core.stringType) return true
   if (x === core.decType) return true
   if (x === core.kdType) return true
   if (x === core.voidType) return true
+  if (typeof x === "string") return true
   if (x?.kind === "RecordType") return true
   if (x?.kind === "FunctionType") return true
   return false
@@ -37,7 +37,6 @@ function equivalent(t1, t2) {
 }
 
 function assignable(fromType, toType) {
-  if (toType === core.anyType) return true
   return equivalent(fromType, toType)
 }
 
@@ -49,10 +48,11 @@ function typeDescription(type) {
   if (type === core.voidType) return "Void"
   if (type?.kind === "RecordType") return type.name
   if (type?.kind === "FunctionType") {
-    const ps = (type.paramTypes ?? []).map(typeDescription).join(", ")
+    const ps = type.paramTypes.map(typeDescription).join(", ")
     const r = typeDescription(type.returnType)
     return `(${ps})->${r}`
   }
+  /* c8 ignore next */
   return "Unknown"
 }
 
@@ -61,7 +61,7 @@ export default function analyze(match) {
 
   function must(condition, message, errorLocation) {
     if (!condition) {
-      const prefix = errorLocation?.at?.source?.getLineAndColumnMessage?.() ?? ""
+      const prefix = errorLocation.at.source.getLineAndColumnMessage()
       throw new Error(`${prefix}${message}`)
     }
   }
@@ -307,7 +307,7 @@ export default function analyze(match) {
       mustNotAlreadyBeDeclared(name, { at: id })
       const t = type.rep()
       mustBeAType(t, { at: type })
-      const p = core.param ? core.param(name, t) : core.variable(name, false, t)
+      const p = core.param(name, t)
       context.add(name, p)
       return p
     },
@@ -539,7 +539,7 @@ export default function analyze(match) {
             }
             return recordConstructor(acc, args)
           }
-          const targetTypes = acc.type.paramTypes ?? []
+          const targetTypes = acc.type.paramTypes
           mustHaveCorrectArgumentCount(args.length, targetTypes.length, { at: p })
           for (let i = 0; i < args.length; i++) {
             mustBeAssignable(args[i], { toType: targetTypes[i] }, { at: p })
