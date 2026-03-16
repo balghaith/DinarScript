@@ -88,6 +88,11 @@ const tests = [
   ["b and false is false", bin("and", b, bool(false), core.boolType), bool(false)],
   ["leaves alone b or b", bAndB, bAndB],
 
+  ["non-intrinsic function call", core.functionCall({name:"f", type:core.functionType([core.decType], core.decType)}, [num(1)]), {kind:"FunctionCall", callee:{name:"f", type:core.functionType([core.decType], core.decType)}, args:[num(1)], type:core.decType}],
+  ["intrinsic void call", core.functionCall({name:"print", intrinsic:true, type:core.functionType([core.anyType], core.voidType)}, [num(1)]), {kind:"Print", args:[num(1)]}],
+  ["intrinsic unary call", core.functionCall({name:"not", intrinsic:true, type:core.functionType([core.boolType], core.boolType)}, [bool(true)]), bool(false)],
+  ["intrinsic binary call", core.functionCall({name:"+", intrinsic:true, type:core.functionType([core.decType, core.decType], core.decType)}, [num(1), num(2)]), num(3)],
+
 
 ]
 

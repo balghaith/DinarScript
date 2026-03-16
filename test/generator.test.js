@@ -125,6 +125,49 @@ const fixtures = [
       }
     `,
   },
+  {
+    name: "match wildcard",
+    source: `
+      match 1:
+        case _: show(1);
+      end
+    `,
+    expected: dedent`
+      {
+        const __match_1 = 1;
+        if (true) {
+          console.log(1);
+        } else {
+        }
+      }
+    `,
+  },
+  {
+    name: "short return",
+    source: `
+      fun f() -> Void:
+        return;
+      end
+    `,
+    expected: dedent`
+      function f_1() {
+        return;
+      }
+    `,
+  },
+  {
+    name: "break statement",
+    source: `
+      while true:
+        break;
+      end
+    `,
+    expected: dedent`
+      while (true) {
+        break;
+      }
+    `,
+  },
 ]
 
 describe("The code generator", () => {

@@ -31,7 +31,8 @@ const semanticChecks = [
   ["relations", "show(1 < 2); show(2 >= 2);"],
   ["and/or", "show(true and false); show(true or false);"],
   ["adds two strings", `show("a" + "b");`],
-  ["call", "fun add(x: KD, y: Dec) -> Dec: return x + y; end show(add(1,2));"]
+  ["call", "fun add(x: KD, y: Dec) -> Dec: return x + y; end show(add(1,2));"],
+  ["function type description", "fun f(x: KD, y: Dec) -> Dec: return x + y; end"]
   ,
 ]
 
@@ -55,6 +56,7 @@ const semanticErrors = [
   ["assignment type mismatch", "let x: Dec = 1; x = true;", /Cannot assign a Bool to a Dec/],
   ["match literal pattern wrong type", "match 1: case true: show(1); end", /Expected a boolean/],
   ["record fields must be distinct", "record R { public x: Dec; private x: Dec; }", /Fields must be distinct/],
+  ["function assigned to kd", "fun f(x: KD) -> KD: return x; end let y: KD = f;", /Operands|Cannot assign|Expected/],
 ]
 
 describe("The analyzer", () => {

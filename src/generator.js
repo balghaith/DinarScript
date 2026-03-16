@@ -27,12 +27,6 @@ export default function generate(program) {
   const isNum = n => n?.kind === "NumberLiteral"
   const isBool = b => b?.kind === "BooleanLiteral"
 
-  const asValue = e => {
-    if (isNum(e)) return e.value
-    if (isBool(e)) return e.value
-    if (e?.kind === "StringLiteral") return JSON.stringify(e.value)
-    return gen(e)
-  }
 
   const generators = {
     Program(p) {
@@ -118,9 +112,6 @@ export default function generate(program) {
       emit("}")
     },
 
-    RecordType(t) {
-      return targetName(t)
-    },
 
     Field(f) {
       return targetName(f)
@@ -180,13 +171,6 @@ export default function generate(program) {
       emit("}")
     },
 
-    Case() {
-      return ""
-    },
-
-    WildcardPattern() {
-      return ""
-    },
   }
 
   const genMatchTest = (tempName, pattern) => {
