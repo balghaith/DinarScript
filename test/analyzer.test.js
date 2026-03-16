@@ -60,7 +60,7 @@ const semanticErrors = [
   ["match literal pattern wrong type", "match 1: case true: show(1); end", /Expected a boolean/],
   ["record fields must be distinct", "record R { public x: Dec; private x: Dec; }", /Fields must be distinct/],
   ["function assigned to kd", "fun f(x: KD) -> KD: return x; end let y: KD = f;", /Operands|Cannot assign|Expected/],
-  ["assign a record to a dec", "record Person { public name: String; } let x: Dec = Person;", /Identifier|Cannot assign|Expected/],
+  ["assign a record to a dec", `record Person { public name: String; } let p = Person("Faisal"); let x: Dec = p;`, /Identifier|Cannot assign|Expected/],
 ]
 
 describe("The analyzer", () => {
