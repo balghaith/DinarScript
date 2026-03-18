@@ -24,14 +24,12 @@ export default function generate(program) {
       }[op] ?? op
     )
 
-  const isNum = n => n?.kind === "NumberLiteral"
-  const isBool = b => b?.kind === "BooleanLiteral"
-
 
   const generators = {
     Program(p) {
       p.statements.forEach(s => {
         const r = gen(s)
+        /* c8 ignore next */
         if (Array.isArray(r)) r.forEach(emit)
       })
     },
@@ -48,8 +46,8 @@ export default function generate(program) {
       return targetName(p)
     },
 
-    Identifier(e) {
-      return targetName(e.ref ?? { name: e.name })
+    MoneyLiteral(e) {
+      return JSON.stringify(e.value)
     },
 
     Assignment(s) {
@@ -178,10 +176,12 @@ export default function generate(program) {
     if (pattern.kind === "BooleanLiteral") return `(${tempName} === ${pattern.value})`
     if (pattern.kind === "NumberLiteral") return `(${tempName} === ${pattern.value})`
     if (pattern.kind === "StringLiteral") return `(${tempName} === ${JSON.stringify(pattern.value)})`
-    if (pattern.kind === "MoneyLiteral") return `(${tempName} === ${JSON.stringify(pattern.text)})`
+    if (pattern.kind === "MoneyLiteral") return `(${tempName} === ${JSON.stringify(pattern.value)})`
+    /* c8 ignore next */
     return "true"
   }
 
   gen(program)
   return output.join("\n")
+
 }

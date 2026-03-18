@@ -168,6 +168,77 @@ const fixtures = [
       }
     `,
   },
+  {
+    name: "match string",
+    source: `
+      match "hi":
+        case "hi": show("yes");
+        case _: show("no");
+      end
+    `,
+    expected: dedent`
+      {
+        const __match_1 = "hi";
+        if ((__match_1 === "hi")) {
+          console.log("yes");
+        } else if (true) {
+          console.log("no");
+        } else {
+        }
+      }
+    `,
+  },
+  {
+    name: "match money",
+    source: `
+      match 5kd:
+        case 5kd: show("same");
+        case _: show("other");
+      end
+    `,
+    expected: dedent`
+      {
+        const __match_1 = "5kd";
+        if ((__match_1 === "5kd")) {
+          console.log("same");
+        } else if (true) {
+          console.log("other");
+        } else {
+        }
+      }
+    `,
+  },
+  {
+    name: "match boolean",
+    source: `
+      match true:
+        case true: show("yes");
+        case _: show("no");
+      end
+    `,
+    expected: dedent`
+      {
+        const __match_1 = true;
+        if ((__match_1 === true)) {
+          console.log("yes");
+        } else if (true) {
+          console.log("no");
+        } else {
+        }
+      }
+    `,
+  },
+  {
+    name: "unary not",
+    source: `
+      let x = true;
+      show(not x);
+    `,
+    expected: dedent`
+      let x_1 = true;
+      console.log(((!x_1)));
+    `,
+  },
 ]
 
 describe("The code generator", () => {
