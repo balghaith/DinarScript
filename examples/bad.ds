@@ -1,3 +1,0 @@
-record Person { public name: String; }
-let p = Person("Faisal");
-let x: Dec = p;

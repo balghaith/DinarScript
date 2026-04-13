@@ -1,0 +1,17 @@
+fun receiptName(first: String, last: String) -> String:
+  return first + " " + last;
+end
+
+fun comparePayments() -> Void:
+  show("applepay" < "cash");
+  show("card" == "card");
+  show("card" != "cash");
+  return;
+end
+
+show(receiptName("Bader", "Wallet"));
+show("applepay" < "cash");
+show("card" == "card");
+show("card" != "cash");
+
+// String concatenation and string comparisons

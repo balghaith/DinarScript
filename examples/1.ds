@@ -1,0 +1,12 @@
+let balance: Dec = 5;
+final currencyName: String = "Dinar";
+let accountOpen: Bool = true;
+
+show(balance);
+show(currencyName);
+show(accountOpen);
+
+balance = balance + 4;
+show(balance);
+
+// Variable declarations, final, type annotations, assignment

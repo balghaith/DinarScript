@@ -1,0 +1,13 @@
+record Customer {
+  public name: String;
+  public points: Dec;
+  private cash: KD;
+}
+
+let customer = Customer("Bader", 22, 5kd);
+
+show(customer.name);
+show(customer.points);
+show(customer.cash);
+
+// Records, public/private fields, record construction, field access

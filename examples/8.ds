@@ -1,0 +1,34 @@
+match true:
+  case false:
+    show("wallet closed");
+  case true:
+    show("wallet open");
+end
+
+match 2:
+  case 1:
+    show("small amount");
+  case 2:
+    show("medium amount");
+end
+
+match "cash":
+  case "card":
+    show("card payment");
+  case "cash":
+    show("cash payment");
+end
+
+match 1kd:
+  case 500fils:
+    show("half dinar");
+  case 1kd:
+    show("one dinar");
+end
+
+match "anything":
+  case _:
+    show("default payment case");
+end
+
+// Match with false, true, number, string, money literal, wildcard

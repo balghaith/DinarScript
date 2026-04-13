@@ -1,0 +1,22 @@
+fun paymentStatus(amount: Dec) -> String:
+  if amount > 0:
+    return "payment received";
+  else:
+    return "no payment";
+  end
+end
+
+fun paymentAlert(amount: Dec):
+  if amount == 3:
+    show("special payment");
+  end
+end
+
+show(paymentStatus(7));
+show(paymentStatus(0));
+
+if 3 == 3:
+  show("special payment");
+end
+
+// If with else, if without else, function with return type, function without return type

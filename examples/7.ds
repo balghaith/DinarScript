@@ -1,0 +1,11 @@
+show(1/4kd);
+show(1/2kd);
+show(1kd);
+show(5kd);
+show(10kd);
+show(20kd);
+show(7kd);
+show(250fils);
+show(3kd250fils);
+
+// Money literals

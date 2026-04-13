@@ -12,5 +12,3 @@ export const grammar = ohm.grammar(grammarSource)
 export function match(source) {
   return grammar.match(source)
 }
-
-export default match

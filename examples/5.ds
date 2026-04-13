@@ -1,0 +1,22 @@
+fun withdrawDown(start: Dec) -> Void:
+  let amount = start;
+  while amount >= 0:
+    show(amount);
+    if amount == 2:
+      break;
+    end
+    amount = amount - 1;
+  end
+  return;
+end
+
+let amount = 5;
+while amount >= 0:
+  show(amount);
+  if amount == 2:
+    break;
+  end
+  amount = amount - 1;
+end
+
+// While loop, break, reassignment

@@ -1,0 +1,25 @@
+record Product {
+  public name: String;
+  public price: KD;
+}
+
+let coffee = Product("Coffee", 2kd);
+let tea = Product("Tea", 1kd);
+
+show(coffee.price);
+match coffee.price:
+  case 1kd:
+    show(coffee.name + " is regular");
+  case _:
+    show(coffee.name + " is premium");
+end
+
+show(tea.price);
+match tea.price:
+  case 1kd:
+    show(tea.name + " is regular");
+  case _:
+    show(tea.name + " is premium");
+end
+
+// Combined showcase: record, field access, match, money pattern, string result

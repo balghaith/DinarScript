@@ -1,0 +1,7 @@
+show(8 + 2);
+show(8 - 2);
+show(8 * 2);
+show(8 / 2);
+show(-8);
+
+// Arithmetic, unary minus, parentheses, no function call dependency

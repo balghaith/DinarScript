@@ -1,0 +1,12 @@
+fun paymentAlert(amount: Dec):
+  if amount == 3:
+    show("special payment");
+  end
+  return;
+end
+
+if 3 == 3:
+  show("special payment");
+end
+
+// Function without explicit return type, short return
