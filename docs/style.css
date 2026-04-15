@@ -410,6 +410,7 @@ footer {
 }
 
 .about-paragraph {
+    font-family: "Cormorant Garamond", serif;
     max-width: 980px;
     color: #c6c6c6;
     font-size: 21px;
