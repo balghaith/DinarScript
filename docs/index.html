@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DinarScript</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="style.css">
+</head>
+
+<body id="top">
+
+<div class="particles">
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+<header class="navbar">
+
+<a href="#top" class="brand">
+<img src="dinarscript-logo.png" class="nav-logo" alt="logo">
+<span>DinarScript</span>
+</a>
+
+<nav>
+<a href="#abstract">Abstract</a>
+<a href="#examples">Examples</a>
+<a href="#developer">Developer</a>
+<a href="https://github.com/balghaith/DinarScript" target="_blank" rel="noopener noreferrer">GitHub</a>
+</nav>
+
+</header>
+
+<section class="hero">
+
+<img src="dinarscript-logo.png" class="hero-logo" alt="logo">
+
+<h1>DinarScript</h1>
+
+<p>
+A statically analyzed language built for clarity and expressive design.
+</p>
+
+<div class="hero-buttons">
+<a href="#abstract" class="btn gold single-btn">
+Discover Language
+</a>
+</div>
+
+</section>
+
+<section id="abstract" class="abstract-page">
+
+<div class="abstract-left">
+<img src="dinarscript-logo.png" class="abstract-logo" id="abstractLogo" alt="logo">
+</div>
+
+<div class="abstract-right">
+
+<h2>Abstract</h2>
+
+<p class="abstract-preview">
+DinarScript is a statically analyzed programming language inspired by the Kuwaiti Dinar. It combines custom currency types, pattern matching, records, and expressive control flow through a uniquely Kuwaiti lens.
+</p>
+
+<a href="abstract.html" class="btn gold abstract-btn">
+Read More
+</a>
+
+</div>
+
+</section>
+
+<section id="examples" class="examples-page">
+
+    <div class="examples-header">
+        <h2>Examples</h2>
+        <p class="examples-subtitle">Interactive DinarScript showcases.</p>
+    </div>
+
+    <div class="example-orbit">
+        <button type="button" class="example-ball ball-1" data-title="Variable declarations, final, type annotations, assignment" data-code='let balance: Dec = 5;
+final currencyName: String = "Dinar";
+let accountOpen: Bool = true;
+
+show(balance);
+show(currencyName);
+show(accountOpen);
+
+balance = balance + 4;
+show(balance);' data-output='5
+Dinar
+true
+9'>Variables</button>
+
+        <button type="button" class="example-ball ball-2" data-title="Arithmetic, unary minus, parentheses, no function call dependency" data-code='show(8 + 2);
+show(8 - 2);
+show(8 * 2);
+show(8 / 2);
+show(-8);' data-output='10
+6
+16
+4
+-8'>Arithmetic</button>
+
+        <button type="button" class="example-ball ball-3" data-title="Equality, comparisons, and/or, not" data-code='fun paymentChecks(price: Dec, budget: Dec) -> Void:
+    show(price == budget);
+    show(price != budget);
+    show(price < budget);
+    show(price <= budget);
+    show(price > budget);
+    show(price >= budget);
+    show((price < budget) and true);
+    show((price > budget) or true);
+    show(not false);
+    return;
+end
+
+show(3 == 5);
+show(3 != 5);
+show(3 < 5);
+show(3 <= 5);
+show(3 > 5);
+show(3 >= 5);
+show((3 < 5) and true);
+show((3 > 5) or true);
+show(not false);' data-output='false
+true
+true
+true
+false
+false
+true
+true
+true'>Logic</button>
+
+        <button type="button" class="example-ball ball-4" data-title="If with else, if without else, function with return type, function without return type" data-code='fun paymentStatus(amount: Dec) -> String:
+    if amount > 0:
+        return "payment received";
+    else:
+        return "no payment";
+    end
+end
+
+fun paymentAlert(amount: Dec):
+    if amount == 3:
+        show("special payment");
+    end
+end
+
+show(paymentStatus(7));
+show(paymentStatus(0));
+
+if 3 == 3:
+    show("special payment");
+end' data-output='payment received
+no payment
+special payment'>Conditions</button>
+
+        <button type="button" class="example-ball ball-5" data-title="While loop, break, reassignment" data-code='fun withdrawDown(start: Dec) -> Void:
+    let amount = start;
+    while amount >= 0:
+        show(amount);
+        if amount == 2:
+            break;
+        end
+        amount = amount - 1;
+    end
+    return;
+end
+
+let amount = 5;
+while amount >= 0:
+    show(amount);
+    if amount == 2:
+        break;
+    end
+    amount = amount - 1;
+end' data-output='5
+4
+3
+2'>Loops</button>
+
+        <button type="button" class="example-ball ball-6" data-title="Records, public/private fields, record construction, field access" data-code='record Customer {
+    public name: String;
+    public points: Dec;
+    private cash: KD;
+}
+
+let customer = Customer("Bader", 22, 5kd);
+
+show(customer.name);
+show(customer.points);
+show(customer.cash);' data-output='Bader
+22
+5kd'>Records</button>
+
+        <button type="button" class="example-ball ball-7" data-title="Money literals" data-code='show(1/4kd);
+show(1/2kd);
+show(1kd);
+show(5kd);
+show(10kd);
+show(20kd);
+show(7kd);
+show(250fils);
+show(3kd250fils);' data-output='1/4kd
+1/2kd
+1kd
+5kd
+10kd
+20kd
+7kd
+250fils
+3kd250fils'>Money</button>
+
+        <button type="button" class="example-ball ball-8" data-title="Match with false, true, number, string, money literal, wildcard" data-code='match true:
+    case false:
+        show("wallet closed");
+    case true:
+        show("wallet open");
+end
+
+match 2:
+    case 1:
+        show("small amount");
+    case 2:
+        show("medium amount");
+end
+
+match "cash":
+    case "card":
+        show("card payment");
+    case "cash":
+        show("cash payment");
+end
+
+match 1kd:
+    case 500fils:
+        show("half dinar");
+    case 1kd:
+        show("one dinar");
+end
+
+match "anything":
+    case _:
+        show("default payment case");
+end' data-output='wallet open
+medium amount
+cash payment
+one dinar
+default payment case'>Match</button>
+
+        <button type="button" class="example-ball ball-9" data-title="String concatenation and string comparisons" data-code='fun receiptName(first: String, last: String) -> String:
+    return first + " " + last;
+end
+
+fun comparePayments() -> Void:
+    show("applepay" < "cash");
+    show("card" == "card");
+    show("card" != "cash");
+    return;
+end
+
+show(receiptName("Bader", "Wallet"));
+show("applepay" < "cash");
+show("card" == "card");
+show("card" != "cash");' data-output='Bader Wallet
+true
+true
+true'>Strings</button>
+
+        <button type="button" class="example-ball ball-10" data-title="Combined showcase: record, field access, match, money pattern, string result" data-code='record Product {
+    public name: String;
+    public price: KD;
+}
+
+let coffee = Product("Coffee", 2kd);
+let tea = Product("Tea", 1kd);
+
+show(coffee.price);
+match coffee.price:
+    case 1kd:
+        show(coffee.name + " is regular");
+    case _:
+        show(coffee.name + " is premium");
+end
+
+show(tea.price);
+match tea.price:
+    case 1kd:
+        show(tea.name + " is regular");
+    case _:
+        show(tea.name + " is premium");
+end' data-output='2kd
+Coffee is premium
+1kd
+Tea is regular'>Showcase</button>
+
+        <button type="button" class="example-ball ball-11" data-title="Function without explicit return type, short return" data-code='fun paymentAlert(amount: Dec):
+    if amount == 3:
+        show("special payment");
+    end
+    return;
+end
+
+if 3 == 3:
+    show("special payment");
+end' data-output='special payment'>Return</button>
+    </div>
+
+</section>
+
+<section id="developer" class="section developer-page">
+
+    <div class="developer-header">
+        <h2>Developer</h2>
+    </div>
+
+    <div class="developer-card">
+        <p>
+        DinarScript was created from a passion for combining creativity, finance, and programming into one original language concept. Inspired by the idea of giving code a unique identity tied to Kuwaiti currency, the project was designed to showcase how programming languages can carry both technical structure and personal vision.
+        </p>
+            
+        <p>
+        Swift is the language I enjoy working with the most, which strongly influenced my appreciation for clean syntax, modern design, and elegant user experiences. That mindset helped shape both the language concept and the interactive website experience behind DinarScript.
+        </p>
+            
+        <p>
+        To explore the source code, development progress, compiler structure, and technical details behind DinarScript, click the GitHub link on the top right of the screen.
+        </p>
+
+        <div class="developer-signature">
+            <img src="dinarscript-logo.png" alt="logo">
+            <span>Bader Al Ghaith</span>
+        </div>
+    </div>
+
+</section>
+
+<footer>
+<img src="dinarscript-logo.png" class="footer-logo" alt="logo">
+<p>© 2026 DinarScript</p>
+</footer>
+
+<div class="example-modal" id="exampleModal">
+    <div class="example-modal-backdrop"></div>
+
+    <div class="example-card-wrap">
+
+        <div class="modal-top-right">
+            <button class="close-modal" id="modalClose">×</button>
+            <img src="dinarscript-logo.png" class="modal-mini-logo" alt="logo">
+        </div>
+    
+        <div class="example-flip-card" id="flipCard">
+
+            <div class="example-card-face example-card-front">
+                <div class="example-card-top">
+                    <h3 id="cardTitle">Example</h3>
+                </div>
+
+                <div class="example-card-body">
+                    <pre id="cardCode"></pre>
+                </div>
+
+                <div class="example-card-bottom">
+                    <button id="flipButton" class="flip-link">View Output</button>
+                </div>
+            </div>
+
+            <div class="example-card-face example-card-back">
+                <div class="example-card-top">
+                    <h3 id="cardTitleBack">Output</h3>
+                </div>
+
+                <div class="example-card-body">
+                    <pre id="cardOutput"></pre>
+                </div>
+
+                <div class="example-card-bottom">
+                    <button id="flipBackButton" class="flip-link">Back to Code</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
