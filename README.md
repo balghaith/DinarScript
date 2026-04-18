@@ -131,14 +131,20 @@ Together, these checks make DinarScript safer and more dependable by catching co
 
 ---
 
-# 💻 Program Examples
+## 💻 Program Examples
 
-## 1️⃣ Variables, `final`, Type Annotations, Assignment
+### 1️⃣ Variables, `final`, Type Annotations, Assignment
 
-| DinarScript | Python | JavaScript |
-|---|---|---|
-| ```ds
-let balance: Dec = 5;
+<table>
+<tr>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
+</tr>
+<tr>
+<td valign="top">
+
+<pre><code>let balance: Dec = 5;
 final currencyName: String = "Dinar";
 let accountOpen: Bool = true;
 
@@ -147,9 +153,12 @@ show(currencyName);
 show(accountOpen);
 
 balance = balance + 4;
-show(balance);
-``` | ```python
-balance = 5
+show(balance);</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>balance = 5
 currency_name = "Dinar"
 account_open = True
 
@@ -158,9 +167,12 @@ print(currency_name)
 print(account_open)
 
 balance = balance + 4
-print(balance)
-``` | ```javascript
-let balance = 5
+print(balance)</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>let balance = 5
 const currencyName = "Dinar"
 let accountOpen = true
 
@@ -169,18 +181,27 @@ console.log(currencyName)
 console.log(accountOpen)
 
 balance = balance + 4
-console.log(balance)
-``` |
+console.log(balance)</code></pre>
+
+</td>
+</tr>
+</table>
 
 ---
 
-## 2️⃣ If / Else, Return Type, Function Without Return Type
+### 2️⃣ If / Else, Return Type, Function Without Return Type
 
-| DinarScript | Python | JavaScript |
-|---|---|---|
-| ```ds
-fun paymentStatus(amount: Dec) -> String:
-  if amount > 0:
+<table>
+<tr>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
+</tr>
+<tr>
+<td valign="top">
+
+<pre><code>fun paymentStatus(amount: Dec) -&gt; String:
+  if amount &gt; 0:
     return "payment received";
   else:
     return "no payment";
@@ -198,10 +219,13 @@ show(paymentStatus(0));
 
 if 3 == 3:
   show("special payment");
-end
-``` | ```python
-def payment_status(amount: float) -> str:
-    if amount > 0:
+end</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>def payment_status(amount: float) -&gt; str:
+    if amount &gt; 0:
         return "payment received"
     else:
         return "no payment"
@@ -214,10 +238,13 @@ print(payment_status(7))
 print(payment_status(0))
 
 if 3 == 3:
-    print("special payment")
-``` | ```javascript
-function paymentStatus(amount) {
-  if (amount > 0) {
+    print("special payment")</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>function paymentStatus(amount) {
+  if (amount &gt; 0) {
     return "payment received"
   } else {
     return "no payment"
@@ -235,19 +262,28 @@ console.log(paymentStatus(0))
 
 if (3 === 3) {
   console.log("special payment")
-}
-``` |
+}</code></pre>
+
+</td>
+</tr>
+</table>
 
 ---
 
-## 3️⃣ While Loop, `break`, Reassignment
+### 3️⃣ While Loop, `break`, Reassignment
 
-| DinarScript | Python | JavaScript |
-|---|---|---|
-| ```ds
-fun withdrawDown(start: Dec) -> Void:
+<table>
+<tr>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
+</tr>
+<tr>
+<td valign="top">
+
+<pre><code>fun withdrawDown(start: Dec) -&gt; Void:
   let amount = start;
-  while amount >= 0:
+  while amount &gt;= 0:
     show(amount);
     if amount == 2:
       break;
@@ -258,17 +294,20 @@ fun withdrawDown(start: Dec) -> Void:
 end
 
 let amount = 5;
-while amount >= 0:
+while amount &gt;= 0:
   show(amount);
   if amount == 2:
     break;
   end
   amount = amount - 1;
-end
-``` | ```python
-def withdraw_down(start: float) -> None:
+end</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>def withdraw_down(start: float) -&gt; None:
     amount = start
-    while amount >= 0:
+    while amount &gt;= 0:
         print(amount)
         if amount == 2:
             break
@@ -276,15 +315,18 @@ def withdraw_down(start: float) -> None:
     return
 
 amount = 5
-while amount >= 0:
+while amount &gt;= 0:
     print(amount)
     if amount == 2:
         break
-    amount = amount - 1
-``` | ```javascript
-function withdrawDown(start) {
+    amount = amount - 1</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>function withdrawDown(start) {
   let amount = start
-  while (amount >= 0) {
+  while (amount &gt;= 0) {
     console.log(amount)
     if (amount === 2) {
       break
@@ -295,23 +337,32 @@ function withdrawDown(start) {
 }
 
 let amount = 5
-while (amount >= 0) {
+while (amount &gt;= 0) {
   console.log(amount)
   if (amount === 2) {
     break
   }
   amount = amount - 1
-}
-``` |
+}</code></pre>
+
+</td>
+</tr>
+</table>
 
 ---
 
-## 4️⃣ Records, Public / Private Fields, Construction, Field Access
+### 4️⃣ Records, Public / Private Fields, Record Construction, Field Access
 
-| DinarScript | Python | JavaScript |
-|---|---|---|
-| ```ds
-record Customer {
+<table>
+<tr>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
+</tr>
+<tr>
+<td valign="top">
+
+<pre><code>record Customer {
   public name: String;
   public points: Dec;
   private cash: KD;
@@ -321,9 +372,12 @@ let customer = Customer("Bader", 22, 5kd);
 
 show(customer.name);
 show(customer.points);
-show(customer.cash);
-``` | ```python
-class Customer:
+show(customer.cash);</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>class Customer:
     def __init__(self, name: str, points: float, cash):
         self.name = name
         self.points = points
@@ -333,9 +387,12 @@ customer = Customer("Bader", 22, "5kd")
 
 print(customer.name)
 print(customer.points)
-print(customer._cash)
-``` | ```javascript
-class Customer {
+print(customer._cash)</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>class Customer {
   constructor(name, points, cash) {
     this.name = name
     this.points = points
@@ -347,17 +404,26 @@ const customer = new Customer("Bader", 22, "5kd")
 
 console.log(customer.name)
 console.log(customer.points)
-console.log(customer.cash)
-``` |
+console.log(customer.cash)</code></pre>
+
+</td>
+</tr>
+</table>
 
 ---
 
-## 5️⃣ Function Without Explicit Return Type, Short Return
+### 5️⃣ Function Without Explicit Return Type, Short Return
 
-| DinarScript | Python | JavaScript |
-|---|---|---|
-| ```ds
-fun paymentAlert(amount: Dec):
+<table>
+<tr>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
+</tr>
+<tr>
+<td valign="top">
+
+<pre><code>fun paymentAlert(amount: Dec):
   if amount == 3:
     show("special payment");
   end
@@ -366,17 +432,23 @@ end
 
 if 3 == 3:
   show("special payment");
-end
-``` | ```python
-def payment_alert(amount: float):
+end</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>def payment_alert(amount: float):
     if amount == 3:
         print("special payment")
     return
 
 if 3 == 3:
-    print("special payment")
-``` | ```javascript
-function paymentAlert(amount) {
+    print("special payment")</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>function paymentAlert(amount) {
   if (amount === 3) {
     console.log("special payment")
   }
@@ -385,5 +457,8 @@ function paymentAlert(amount) {
 
 if (3 === 3) {
   console.log("special payment")
-}
-``` |
+}</code></pre>
+
+</td>
+</tr>
+</table>
