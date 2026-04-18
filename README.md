@@ -150,20 +150,53 @@ Together, these checks make DinarScript safer and more dependable by catching co
 
 <table>
 <tr>
-<th align="center">
-<img src="docs/dinarscript-logo.png" width="22"><br>DinarScript
-</th>
-<th align="center">
-<img src="docs/python.png" width="22"><br>Python
-</th>
-<th align="center">
-<img src="docs/javascript.png" width="22"><br>JavaScript
-</th>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
 </tr>
 <tr>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
+<td valign="top">
+
+<pre><code>let balance: Dec = 5;
+final currencyName: String = "Dinar";
+let accountOpen: Bool = true;
+
+show(balance);
+show(currencyName);
+show(accountOpen);
+
+balance = balance + 4;
+show(balance);</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>balance = 5
+currency_name = "Dinar"
+account_open = True
+
+print(balance)
+print(currency_name)
+print(account_open)
+
+balance = balance + 4
+print(balance)</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>let balance = 5
+const currencyName = "Dinar"
+let accountOpen = true
+
+console.log(balance)
+console.log(currencyName)
+console.log(accountOpen)
+
+balance = balance + 4
+console.log(balance)</code></pre>
+
+</td>
 </tr>
 </table>
 
@@ -173,20 +206,78 @@ Together, these checks make DinarScript safer and more dependable by catching co
 
 <table>
 <tr>
-<th align="center">
-<img src="docs/dinarscript-logo.png" width="22"><br>DinarScript
-</th>
-<th align="center">
-<img src="docs/python.png" width="22"><br>Python
-</th>
-<th align="center">
-<img src="docs/javascript.png" width="22"><br>JavaScript
-</th>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
 </tr>
 <tr>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
+<td valign="top">
+
+<pre><code>fun paymentStatus(amount: Dec) -&gt; String:
+  if amount &gt; 0:
+    return "payment received";
+  else:
+    return "no payment";
+  end
+end
+
+fun paymentAlert(amount: Dec):
+  if amount == 3:
+    show("special payment");
+  end
+end
+
+show(paymentStatus(7));
+show(paymentStatus(0));
+
+if 3 == 3:
+  show("special payment");
+end</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>def payment_status(amount: float) -&gt; str:
+    if amount &gt; 0:
+        return "payment received"
+    else:
+        return "no payment"
+
+def payment_alert(amount: float):
+    if amount == 3:
+        print("special payment")
+
+print(payment_status(7))
+print(payment_status(0))
+
+if 3 == 3:
+    print("special payment")</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>function paymentStatus(amount) {
+  if (amount &gt; 0) {
+    return "payment received"
+  } else {
+    return "no payment"
+  }
+}
+
+function paymentAlert(amount) {
+  if (amount === 3) {
+    console.log("special payment")
+  }
+}
+
+console.log(paymentStatus(7))
+console.log(paymentStatus(0))
+
+if (3 === 3) {
+  console.log("special payment")
+}</code></pre>
+
+</td>
 </tr>
 </table>
 
@@ -196,20 +287,78 @@ Together, these checks make DinarScript safer and more dependable by catching co
 
 <table>
 <tr>
-<th align="center">
-<img src="docs/dinarscript-logo.png" width="22"><br>DinarScript
-</th>
-<th align="center">
-<img src="docs/python.png" width="22"><br>Python
-</th>
-<th align="center">
-<img src="docs/javascript.png" width="22"><br>JavaScript
-</th>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
 </tr>
 <tr>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
+<td valign="top">
+
+<pre><code>fun withdrawDown(start: Dec) -&gt; Void:
+  let amount = start;
+  while amount &gt;= 0:
+    show(amount);
+    if amount == 2:
+      break;
+    end
+    amount = amount - 1;
+  end
+  return;
+end
+
+let amount = 5;
+while amount &gt;= 0:
+  show(amount);
+  if amount == 2:
+    break;
+  end
+  amount = amount - 1;
+end</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>def withdraw_down(start: float) -&gt; None:
+    amount = start
+    while amount &gt;= 0:
+        print(amount)
+        if amount == 2:
+            break
+        amount = amount - 1
+    return
+
+amount = 5
+while amount &gt;= 0:
+    print(amount)
+    if amount == 2:
+        break
+    amount = amount - 1</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>function withdrawDown(start) {
+  let amount = start
+  while (amount &gt;= 0) {
+    console.log(amount)
+    if (amount === 2) {
+      break
+    }
+    amount = amount - 1
+  }
+  return
+}
+
+let amount = 5
+while (amount &gt;= 0) {
+  console.log(amount)
+  if (amount === 2) {
+    break
+  }
+  amount = amount - 1
+}</code></pre>
+
+</td>
 </tr>
 </table>
 
@@ -219,20 +368,58 @@ Together, these checks make DinarScript safer and more dependable by catching co
 
 <table>
 <tr>
-<th align="center">
-<img src="docs/dinarscript-logo.png" width="22"><br>DinarScript
-</th>
-<th align="center">
-<img src="docs/python.png" width="22"><br>Python
-</th>
-<th align="center">
-<img src="docs/javascript.png" width="22"><br>JavaScript
-</th>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
 </tr>
 <tr>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
+<td valign="top">
+
+<pre><code>record Customer {
+  public name: String;
+  public points: Dec;
+  private cash: KD;
+}
+
+let customer = Customer("Bader", 22, 5kd);
+
+show(customer.name);
+show(customer.points);
+show(customer.cash);</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>class Customer:
+    def __init__(self, name: str, points: float, cash):
+        self.name = name
+        self.points = points
+        self._cash = cash
+
+customer = Customer("Bader", 22, "5kd")
+
+print(customer.name)
+print(customer.points)
+print(customer._cash)</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>class Customer {
+  constructor(name, points, cash) {
+    this.name = name
+    this.points = points
+    this.cash = cash
+  }
+}
+
+const customer = new Customer("Bader", 22, "5kd")
+
+console.log(customer.name)
+console.log(customer.points)
+console.log(customer.cash)</code></pre>
+
+</td>
 </tr>
 </table>
 
@@ -242,24 +429,53 @@ Together, these checks make DinarScript safer and more dependable by catching co
 
 <table>
 <tr>
-<th align="center">
-<img src="docs/dinarscript-logo.png" width="22"><br>DinarScript
-</th>
-<th align="center">
-<img src="docs/python.png" width="22"><br>Python
-</th>
-<th align="center">
-<img src="docs/javascript.png" width="22"><br>JavaScript
-</th>
+<th>DinarScript</th>
+<th>Python</th>
+<th>JavaScript</th>
 </tr>
 <tr>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
-<td valign="top"><pre><code>...</code></pre></td>
+<td valign="top">
+
+<pre><code>fun paymentAlert(amount: Dec):
+  if amount == 3:
+    show("special payment");
+  end
+  return;
+end
+
+if 3 == 3:
+  show("special payment");
+end</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>def payment_alert(amount: float):
+    if amount == 3:
+        print("special payment")
+    return
+
+if 3 == 3:
+    print("special payment")</code></pre>
+
+</td>
+<td valign="top">
+
+<pre><code>function paymentAlert(amount) {
+  if (amount === 3) {
+    console.log("special payment")
+  }
+  return
+}
+
+if (3 === 3) {
+  console.log("special payment")
+}</code></pre>
+
+</td>
 </tr>
 </table>
 
----
 
 ### 🔎 More Examples
 
