@@ -146,7 +146,7 @@ Together, these checks make DinarScript safer and more dependable by catching co
 
 ## 💻 Program Examples
 
-### 1️⃣ Variables, final, Type Annotations, Assignment
+### 1️⃣ Combined Showcase: Record, Field Access, Match, Money Pattern, String Result
 
 <table>
 <tr>
@@ -157,44 +157,91 @@ Together, these checks make DinarScript safer and more dependable by catching co
 <tr>
 <td valign="top">
 
-<pre><code>let balance: Dec = 5;
-final currencyName: String = "Dinar";
-let accountOpen: Bool = true;
+<pre><code>record Product {
+  public name: String;
+  public price: KD;
+}
 
-show(balance);
-show(currencyName);
-show(accountOpen);
+let coffee = Product("Coffee", 2kd);
+let tea = Product("Tea", 1kd);
 
-balance = balance + 4;
-show(balance);</code></pre>
+show(coffee.price);
+
+match coffee.price:
+  case 1kd:
+    show(coffee.name + " is regular");
+  case _:
+    show(coffee.name + " is premium");
+end
+
+show(tea.price);
+
+match tea.price:
+  case 1kd:
+    show(tea.name + " is regular");
+  case _:
+    show(tea.name + " is premium");
+end</code></pre>
 
 </td>
 <td valign="top">
 
-<pre><code>balance = 5
-currency_name = "Dinar"
-account_open = True
+<pre><code>class Product:
+    def __init__(self, name, price):
+        self.name = name
+        self.price = price
 
-print(balance)
-print(currency_name)
-print(account_open)
+coffee = Product("Coffee", "2kd")
+tea = Product("Tea", "1kd")
 
-balance = balance + 4
-print(balance)</code></pre>
+print(coffee.price)
+
+match coffee.price:
+    case "1kd":
+        print(coffee.name + " is regular")
+    case _:
+        print(coffee.name + " is premium")
+
+print(tea.price)
+
+match tea.price:
+    case "1kd":
+        print(tea.name + " is regular")
+    case _:
+        print(tea.name + " is premium")</code></pre>
 
 </td>
 <td valign="top">
 
-<pre><code>let balance = 5
-const currencyName = "Dinar"
-let accountOpen = true
+<pre><code>class Product {
+  constructor(name, price) {
+    this.name = name;
+    this.price = price;
+  }
+}
 
-console.log(balance)
-console.log(currencyName)
-console.log(accountOpen)
+const coffee = new Product("Coffee", "2kd");
+const tea = new Product("Tea", "1kd");
 
-balance = balance + 4
-console.log(balance)</code></pre>
+console.log(coffee.price);
+
+switch (coffee.price) {
+  case "1kd":
+    console.log(coffee.name + " is regular");
+    break;
+  default:
+    console.log(coffee.name + " is premium");
+}
+
+console.log(tea.price);
+
+switch (tea.price) {
+  case "1kd":
+    console.log(tea.name + " is regular");
+    break;
+  default:
+    console.log(tea.name + " is premium");
+}</code></pre>
 
 </td>
 </tr>
@@ -425,7 +472,7 @@ console.log(customer.cash)</code></pre>
 
 ---
 
-### 5️⃣ Function Without Explicit Return Type, Short Return
+### 5️⃣ Match with False, True, Number, String, Money Literal, Wildcard
 
 <table>
 <tr>
@@ -436,47 +483,126 @@ console.log(customer.cash)</code></pre>
 <tr>
 <td valign="top">
 
-<pre><code>fun paymentAlert(amount: Dec):
-  if amount == 3:
-    show("special payment");
-  end
-  return;
+<pre><code>match true:
+  case false:
+    show("wallet closed");
+  case true:
+    show("wallet open");
 end
 
-if 3 == 3:
-  show("special payment");
+match 2:
+  case 1:
+    show("small amount");
+  case 2:
+    show("medium amount");
+end
+
+match "cash":
+  case "card":
+    show("card payment");
+  case "cash":
+    show("cash payment");
+end
+
+match 1kd:
+  case 500fils:
+    show("half dinar");
+  case 1kd:
+    show("one dinar");
+end
+
+match "anything":
+  case _:
+    show("default payment case");
 end</code></pre>
 
 </td>
 <td valign="top">
 
-<pre><code>def payment_alert(amount: float):
-    if amount == 3:
-        print("special payment")
-    return
+<pre><code>match True:
+    case False:
+        print("wallet closed")
+    case True:
+        print("wallet open")
 
-if 3 == 3:
-    print("special payment")</code></pre>
+match 2:
+    case 1:
+        print("small amount")
+    case 2:
+        print("medium amount")
+
+match "cash":
+    case "card":
+        print("card payment")
+    case "cash":
+        print("cash payment")
+
+match "1kd":
+    case "500fils":
+        print("half dinar")
+    case "1kd":
+        print("one dinar")
+
+match "anything":
+    case _:
+        print("default payment case")</code></pre>
 
 </td>
 <td valign="top">
 
-<pre><code>function paymentAlert(amount) {
-  if (amount === 3) {
-    console.log("special payment")
-  }
-  return
+<pre><code>switch (true) {
+  case false:
+    console.log("wallet closed");
+    break;
+  case true:
+    console.log("wallet open");
+    break;
 }
 
-if (3 === 3) {
-  console.log("special payment")
+switch (2) {
+  case 1:
+    console.log("small amount");
+    break;
+  case 2:
+    console.log("medium amount");
+    break;
+}
+
+switch ("cash") {
+  case "card":
+    console.log("card payment");
+    break;
+  case "cash":
+    console.log("cash payment");
+    break;
+}
+
+switch ("1kd") {
+  case "500fils":
+    console.log("half dinar");
+    break;
+  case "1kd":
+    console.log("one dinar");
+    break;
+}
+
+switch ("anything") {
+  default:
+    console.log("default payment case");
 }</code></pre>
 
 </td>
 </tr>
 </table>
 
+---
 
 ### 🔎 More Examples
 
 Many additional examples are available in the `examples/` folder.
+
+---
+
+## 🙏 Acknowledgements
+
+Special thanks to **Dr. Toal** for guidance throughout the project, and to **ChatGPT** for troubleshooting during development.
